@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Employee</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Add Employee</h2>
+    <form id="employeeForm">
+      <label for="firstName">First name</label>
+      <input type="text" id="firstName" name="firstName" required>
+      <div class="error-message" id="errorFirstName"></div>
+
+      <label for="lastName">Last name</label>
+      <input type="text" id="lastName" name="lastName" required>
+      <div class="error-message" id="errorLastName"></div>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+      <div class="error-message" id="errorEmail"></div>
+
+      <div style="display: flex; gap: 16px;">
+        <div style="flex: 1;">
+          <label for="department">Department</label>
+          <select id="department" name="department" required>
+            <option value="">Select</option>
+            <option value="HR">HR</option>
+            <option value="IT">IT</option>
+            <option value="Finance">Finance</option>
+            <option value="Marketing">Marketing</option>
+          </select>
+          <div class="error-message" id="errorDepartment"></div>
+        </div>
+        <div style="flex: 1;">
+          <label for="role">Role</label>
+          <select id="role" name="role" required>
+            <option value="">Select</option>
+            <option value="Manager">Manager</option>
+            <option value="Developer">Developer</option>
+            <option value="Analyst">Analyst</option>
+            <option value="Designer">Designer</option>
+          </select>
+          <div class="error-message" id="errorRole"></div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" onclick="window.location.href='index.html'">Cancel</button>
+        <button type="submit" class="submit-btn">Add</button>
+      </div>
+    </form>
+  </div>
+  <script src="js/form.js"></script>
+  <script>
+    document.getElementById('employeeForm').onsubmit = function(e) {
+      e.preventDefault();
+      // Simple validation
+      let valid = true;
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const department = document.getElementById('department').value;
+      const role = document.getElementById('role').value;
+      document.getElementById('errorFirstName').textContent = firstName ? '' : 'First name is required.';
+      document.getElementById('errorLastName').textContent = lastName ? '' : 'Last name is required.';
+      document.getElementById('errorEmail').textContent = email ? '' : 'Email is required.';
+      document.getElementById('errorDepartment').textContent = department ? '' : 'Department is required.';
+      document.getElementById('errorRole').textContent = role ? '' : 'Role is required.';
+      if (!firstName || !lastName || !email || !department || !role) valid = false;
+      if (!/^\S+@\S+\.\S+$/.test(email)) {
+        document.getElementById('errorEmail').textContent = 'Invalid email format.';
+        valid = false;
+      }
+      if (!valid) return;
+      // Save to localStorage (simulate DB)
+      let employees = JSON.parse(localStorage.getItem('employees') || '[]');
+      employees.push({
+        id: '_' + Math.random().toString(36).substr(2, 9),
+        firstName, lastName, email, department, role
+      });
+      localStorage.setItem('employees', JSON.stringify(employees));
+      window.location.href = 'index.html';
+    };
+  </script>
+</body>
+</html> 
